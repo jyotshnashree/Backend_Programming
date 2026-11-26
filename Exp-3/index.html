@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Floor Plan — Hall Booking &amp; Layout Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <div class="mark">
+      <span class="mark-glyph">⟐</span>
+      <span class="mark-text">The Floor Plan</span>
+    </div>
+    <nav class="head-nav">
+      <a href="#plan">Plan a hall</a>
+      <a href="#bookings">Bookings</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-row">
+    <div class="hero-copy">
+      <p class="eyebrow">Banquet, hotel &amp; restaurant layout planner</p>
+      <h1>Draw the room<br>before you book it.</h1>
+      <p class="lede">Tell us the room's dimensions, the type of space you're opening, and how many tables and chairs you need. We draft it to scale, right on this page, so you know it fits before you commit to a date.</p>
+      <a href="#plan" class="btn btn-primary">Start planning ↓</a>
+    </div>
+    <div class="hero-blueprint" aria-hidden="true">
+      <svg viewBox="0 0 300 220" class="hero-svg">
+        <defs>
+          <pattern id="heroGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--line)" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect x="10" y="10" width="280" height="200" fill="url(#heroGrid)" stroke="var(--gold)" stroke-width="1.5"/>
+        <circle cx="80" cy="70" r="18" fill="none" stroke="var(--wine)" stroke-width="1.5"/>
+        <circle cx="160" cy="70" r="18" fill="none" stroke="var(--wine)" stroke-width="1.5"/>
+        <circle cx="240" cy="70" r="18" fill="none" stroke="var(--wine)" stroke-width="1.5"/>
+        <circle cx="80" cy="140" r="18" fill="none" stroke="var(--wine)" stroke-width="1.5"/>
+        <circle cx="160" cy="140" r="18" fill="none" stroke="var(--wine)" stroke-width="1.5"/>
+        <circle cx="240" cy="140" r="18" fill="none" stroke="var(--wine)" stroke-width="1.5"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<main class="wrap main-grid" id="plan">
+
+  <form class="plan-form" id="planForm" novalidate>
+    <div class="form-block">
+      <p class="block-label">01 — The hall</p>
+      <div class="field-row">
+        <label for="dimMode">Dimension input</label>
+        <select id="dimMode">
+          <option value="preset">Choose a preset size</option>
+          <option value="custom">Enter custom dimensions</option>
+        </select>
+      </div>
+
+      <div class="field-row" id="presetRow">
+        <label for="hallPreset">Hall size</label>
+        <select id="hallPreset">
+          <option value="9x6">Small — 9m × 6m (54 m²)</option>
+          <option value="15x10" selected>Medium — 15m × 10m (150 m²)</option>
+          <option value="24x15">Large — 24m × 15m (360 m²)</option>
+          <option value="30x20">Grand — 30m × 20m (600 m²)</option>
+        </select>
+      </div>
+
+      <div class="field-row two-col" id="customRow" hidden>
+        <div>
+          <label for="hallLength">Length (m)</label>
+          <input type="number" id="hallLength" min="3" max="60" value="15">
+        </div>
+        <div>
+          <label for="hallWidth">Width (m)</label>
+          <input type="number" id="hallWidth" min="3" max="60" value="10">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label for="windowView">View from the window</label>
+        <select id="windowView">
+          <option value="none">No window / interior hall</option>
+          <option value="garden" selected>Garden</option>
+          <option value="pool">Pool</option>
+          <option value="street">Street</option>
+          <option value="sea">Sea</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-block">
+      <p class="block-label">02 — Seating</p>
+      <div class="field-row">
+        <label for="venueType">Space type</label>
+        <select id="venueType">
+          <option value="restaurant">Restaurant dining room</option>
+          <option value="hotel">Hotel breakfast / dining area</option>
+          <option value="banquet" selected>Banquet / event hall</option>
+          <option value="cafe">Cafe / lounge</option>
+        </select>
+        <p class="field-help" id="venueHelp"></p>
+      </div>
+      <div class="field-row two-col">
+        <div>
+          <label for="numTables">Number of tables</label>
+          <input type="number" id="numTables" min="1" max="200" value="12">
+        </div>
+        <div>
+          <label for="chairsPerTable">Chairs per table</label>
+          <select id="chairsPerTable">
+            <option value="4">4</option>
+            <option value="6" selected>6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <label for="tableShape">Table shape</label>
+        <select id="tableShape">
+          <option value="round" selected>Round / Circle</option>
+          <option value="square">Square</option>
+          <option value="rectangle">Rectangle</option>
+          <option value="oval">Oval</option>
+          <option value="hexagon">Hexagon</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-block">
+      <p class="block-label">03 — Event</p>
+      <div class="field-row two-col">
+        <div>
+          <label for="eventDate">Event date</label>
+          <input type="date" id="eventDate" min="">
+          <p class="field-help" id="eventDateHelp">You can't choose the previous date.</p>
+        </div>
+        <div>
+          <label for="reqid">Request ID</label>
+          <input type="text" id="reqid" value="—" disabled>
+        </div>
+      </div>
+      <div class="field-row">
+        <label for="remarks">Remarks</label>
+        <textarea id="remarks" rows="2" placeholder="Anything the planner should know — stage, dance floor, dietary setup…"></textarea>
+      </div>
+    </div>
+
+    <div class="form-block">
+      <p class="block-label">04 — Who's booking</p>
+      <div class="field-row two-col">
+        <div>
+          <label for="custName">Full name</label>
+          <input type="text" id="custName" placeholder="Your name" required>
+        </div>
+        <div>
+          <label for="custPhone">Phone number</label>
+          <input type="tel" id="custPhone" placeholder="+1 555 000 0000" required>
+        </div>
+      </div>
+      <div class="field-row">
+        <label for="custEmail">Email</label>
+        <input type="email" id="custEmail" placeholder="you@example.com" required>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" id="submitBtn">Save booking request</button>
+      <span class="save-note" id="saveNote"></span>
+    </div>
+  </form>
+
+  <aside class="plan-preview">
+    <p class="block-label">Live layout — drawn to scale</p>
+    <div class="blueprint-frame">
+      <canvas id="blueprintCanvas" width="640" height="440"></canvas>
+      <div class="window-tag" id="windowTag"></div>
+    </div>
+    <div class="fit-readout" id="fitReadout">
+      <span class="fit-dot" id="fitDot"></span>
+      <span id="fitText">Checking layout…</span>
+    </div>
+    <dl class="spec-list" id="specList"></dl>
+  </aside>
+
+</main>
+
+<section class="wrap" id="bookings">
+  <p class="block-label">Saved requests</p>
+  <p class="bookings-hint">Submitted requests are written to <code>data/bookings.json</code> on the server. This list reflects whatever the Node server currently has on file.</p>
+  <div id="updateCounter" aria-live="polite"></div>
+  <div class="table-wrap">
+    <table id="bookingsTable">
+      <thead>
+        <tr>
+          <th>Req ID</th><th>Name</th><th>Date</th><th>Use case</th><th>Hall</th><th>Tables</th><th>Fit</th><th>Updates</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="bookingsBody">
+        <tr><td colspan="9" class="empty-row">No requests loaded yet — start the server and submit one above.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p>The Floor Plan — a booking &amp; capacity planner for banquet halls.</p>
+  </div>
+</footer>
+
+<div class="alter-modal" id="alterModal" hidden>
+  <div class="alter-dialog" role="dialog" aria-modal="true" aria-labelledby="alterTitle">
+    <div class="alter-head">
+      <div>
+        <p class="alter-eyebrow">Alter record</p>
+        <h2 id="alterTitle">Alter <span id="alterReqid">REQ-0000</span></h2>
+      </div>
+      <button class="close-modal" type="button" id="closeAlter">Close</button>
+    </div>
+    <section class="alter-section">
+      <h3>Add field</h3>
+      <form class="alter-field-form" id="addFieldForm">
+        <div>
+          <label for="customFieldName">Field name</label>
+          <input id="customFieldName" type="text" placeholder="Example: source" required>
+        </div>
+        <div>
+          <label for="customFieldValue">Field value</label>
+          <input id="customFieldValue" type="text" placeholder="Example: Experiment 3" required>
+        </div>
+        <button class="modal-primary" type="submit">Add field</button>
+      </form>
+    </section>
+    <section class="alter-section">
+      <h3>Delete field</h3>
+      <label for="deleteFieldSelect">Field</label>
+      <select id="deleteFieldSelect"><option value="">Choose a field</option></select>
+      <button class="modal-danger" type="button" id="deleteFieldButton">Delete field</button>
+    </section>
+    <p class="modal-note" id="alterNote"></p>
+  </div>
+</div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="react-ui.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

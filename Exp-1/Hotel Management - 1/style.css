@@ -1,0 +1,145 @@
+/* =========================================================
+   ROOM FIT — Simplified Beige Theme (No JS Required)
+========================================================= */
+
+/* 1. Base Styles & Layout */
+body {
+  background-color: #F5F5DC; /* Beige */
+  color: #333;
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 2rem;
+}
+
+.app {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.control-panel, .viewport {
+  background: rgba(255, 255, 255, 0.6);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #D2C4B4;
+  flex: 1;
+  min-width: 300px;
+}
+
+/* 2. Hide Radio Buttons but keep functionality */
+.visually-hidden {
+  display: none;
+}
+
+/* 3. Interactive Option Cards */
+.option-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Highlighting selected options */
+input:checked + .option-card {
+  background: #DEB887; /* Warm Wood Color */
+  border-color: #8B4513;
+  font-weight: bold;
+}
+
+/* 4. The Blueprint Canvas */
+.blueprint {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 350px;
+  background: #FAFAFA;
+  border: 2px dashed #bbb;
+  margin-top: 1rem;
+}
+
+.room-box {
+  position: relative;
+  border: 4px solid #444;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+/* 5. Dynamic Room Sizes (The :has logic) */
+body:has(#size-s:checked) .room-box { width: 180px; height: 180px; }
+body:has(#size-m:checked) .room-box { width: 260px; height: 220px; }
+body:has(#size-l:checked) .room-box { width: 340px; height: 280px; }
+
+/* 6. Dynamic Table Layouts Visibility */
+.layout {
+  display: none;
+  position: absolute;
+  inset: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 15px;
+}
+body:has(#tab-1:checked) .layout-1 { display: flex; }
+body:has(#tab-2:checked) .layout-2 { display: flex; }
+body:has(#tab-3:checked) .layout-3 { display: flex; }
+body:has(#tab-4:checked) .layout-4 { display: flex; }
+
+/* 7. Table & Chairs Styling */
+.table-unit {
+  position: relative;
+  width: 46px;
+  height: 46px;
+}
+.table {
+  position: absolute;
+  inset: 10px;
+  background: #DEB887;
+  border-radius: 50%;
+}
+.chair {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #8B4513;
+  border-radius: 50%;
+}
+.chair--n { top: 0; left: 18px; }
+.chair--s { bottom: 0; left: 18px; }
+.chair--w { left: 0; top: 18px; }
+.chair--e { right: 0; top: 18px; }
+
+/* 8. Dynamic Verdict Logic */
+.verdict {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #fff;
+  border-left: 5px solid #4CAF50;
+}
+
+/* Default state: It Fits */
+.verdict__stamp::after { content: "✅ FITS"; font-weight: bold; color: #4CAF50; }
+.verdict__note::after { content: " Plenty of room to move around."; }
+
+/* Overrides for bad combinations (Small room + 3 or 4 tables, Medium room + 4 tables) */
+body:has(#size-s:checked):has(#tab-3:checked) .verdict,
+body:has(#size-s:checked):has(#tab-4:checked) .verdict,
+body:has(#size-m:checked):has(#tab-4:checked) .verdict {
+  border-left-color: #F44336;
+}
+body:has(#size-s:checked):has(#tab-3:checked) .verdict__stamp::after,
+body:has(#size-s:checked):has(#tab-4:checked) .verdict__stamp::after,
+body:has(#size-m:checked):has(#tab-4:checked) .verdict__stamp::after {
+  content: "❌ NO FIT"; color: #F44336; 
+}
+body:has(#size-s:checked):has(#tab-3:checked) .verdict__note::after,
+body:has(#size-s:checked):has(#tab-4:checked) .verdict__note::after,
+body:has(#size-m:checked):has(#tab-4:checked) .verdict__note::after {
+  content: " Doesn't fit — choose a larger room or fewer tables."; 
+}

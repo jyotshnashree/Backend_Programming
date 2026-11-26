@@ -1,0 +1,12 @@
+{
+  "name": "the-floor-plan",
+  "version": "1.0.0",
+  "description": "Hall booking and table/chair layout planner — HTML/CSS frontend with a Node.js backend that saves requests to JSON.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Room Management System</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div>
+      <p class="eyebrow">Hotel Room Management System</p>
+      <h1>Plan hall bookings, preview layouts, and save every reservation as JSON.</h1>
+      <p class="hero-copy">Enter customer details, choose a hall size, and generate all valid table-and-chair layouts. If the booking is too crowded, the system will suggest changes before you save.</p>
+    </div>
+  </header>
+
+  <main class="app-layout">
+    <form class="controls" id="booking-form">
+      <fieldset>
+        <legend>01. Customer Details</legend>
+        <div class="setting-row">
+          <div class="setting-field">
+            <label for="customer-name">Customer Name</label>
+            <input type="text" id="customer-name" placeholder="Enter customer name" required>
+          </div>
+          <div class="setting-field">
+            <label for="phone-no">Phone No</label>
+            <input type="tel" id="phone-no" placeholder="e.g. 9876543210" required>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-field">
+            <label for="booking-date">Date</label>
+            <input type="date" id="booking-date" required>
+          </div>
+          <div class="setting-field">
+            <label for="customer-id">Customer ID</label>
+            <input type="text" id="customer-id" readonly>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>02. Hall Dimensions</legend>
+        <p class="setting-note">Select one hall size by using the checkbox style options.</p>
+        <div class="setting-row">
+          <div class="setting-field">
+            <label class="choice-card"><input type="checkbox" name="hall-size" value="small" checked> Small Hall <span>10 x 10</span></label>
+          </div>
+          <div class="setting-field">
+            <label class="choice-card"><input type="checkbox" name="hall-size" value="medium"> Medium Hall <span>14 x 12</span></label>
+          </div>
+          <div class="setting-field">
+            <label class="choice-card"><input type="checkbox" name="hall-size" value="large"> Large Hall <span>20 x 16</span></label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>03. Layout Inputs</legend>
+        <div class="setting-row">
+          <div class="setting-field">
+            <label for="table-count">Tables</label>
+            <input type="number" id="table-count" min="1" max="10" step="1" value="1">
+          </div>
+          <div class="setting-field">
+            <label for="chair-count">Chairs</label>
+            <input type="number" id="chair-count" min="1" max="30" step="1" value="4">
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-field setting-field--full">
+            <label for="remarks">Remarks</label>
+            <textarea id="remarks" rows="3" placeholder="Add special notes for the booking"></textarea>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>04. Reservation</legend>
+        <p class="setting-note">Save the reservation to the JSON file on the NodeJS server.</p>
+        <div class="reservation-actions">
+          <button type="submit" class="primary-action">Save Booking</button>
+          <button type="button" id="reset-booking-btn" class="secondary-action">Reset</button>
+        </div>
+      </fieldset>
+
+    </form>
+
+    <section class="viewport">
+      <div class="status-panel" id="status-panel">
+        <p class="status-panel__label">Live status</p>
+        <h2 id="fit-title">Ready to plan</h2>
+        <p id="fit-note">Choose hall dimensions and layout inputs to see the possible arrangements.</p>
+      </div>
+
+      <div class="summary-grid">
+        <article class="summary-card">
+          <h3>Booking Summary</h3>
+          <div id="booking-summary">Fill the form to see the saved booking preview.</div>
+        </article>
+        <article class="summary-card">
+          <h3>Saved Customer ID</h3>
+          <div class="customer-id-box" id="customer-id-preview">Will generate automatically</div>
+        </article>
+      </div>
+
+      <section class="layout-area">
+        <div class="section-heading">
+          <h2>Possible Layouts</h2>
+          <p>Every arrangement that can fit is shown below. If none fit, the app will recommend changes.</p>
+        </div>
+        <div id="layout-results" class="layout-results"></div>
+      </section>
+
+      <section class="saved-bookings">
+        <div class="section-heading">
+          <h2>Saved Bookings</h2>
+          <p>All bookings are stored in the server JSON file.</p>
+        </div>
+        <div id="saved-bookings-list" class="saved-bookings__list"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

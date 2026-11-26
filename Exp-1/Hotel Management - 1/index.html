@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimal Room Planner</title>
+<style>
+  /* Minimal, low CSS styling */
+  body {
+    background-color: #F5F5DC; /* Beige */
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #333;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1rem;
+  }
+
+  .app-layout {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .controls {
+    flex: 1;
+    min-width: 250px;
+  }
+
+  fieldset {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  legend {
+    font-weight: bold;
+    padding: 0 5px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+
+  .setting-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .setting-field {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .setting-field input {
+    width: 100%;
+    padding: 0.45rem;
+    margin-top: 0.25rem;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+  }
+
+  .setting-note {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.6rem;
+  }
+
+  /* Room Canvas area */
+  .viewport {
+    flex: 2;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .room {
+    background-color: #fff;
+    border: 3px solid #444;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 20px;
+    padding: 30px;
+    transition: all 0.3s ease;
+  }
+
+  .window {
+    position: absolute;
+    top: -3px; /* Align with top border */
+    width: 100px;
+    height: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 24px; /* For the view emoji */
+    overflow: visible;
+  }
+
+  .table-unit {
+    position: relative;
+    width: 78px;
+    height: 58px;
+    flex: 0 0 auto;
+  }
+
+  .table-core {
+    position: absolute;
+    inset: 10px 8px;
+    background-color: #DEB887; /* Wood color */
+    border: 3px solid #8B5E3C;
+    border-radius: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  }
+
+  .chair {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #8B4513;
+    border-radius: 50%;
+    border: 2px solid #5D3719;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  }
+
+  .chair--n { top: 0; left: 50%; transform: translateX(-50%); }
+  .chair--s { bottom: 0; left: 50%; transform: translateX(-50%); }
+  .chair--w { left: 0; top: 50%; transform: translateY(-50%); }
+  .chair--e { right: 0; top: 50%; transform: translateY(-50%); }
+
+  .chair--nw { top: 6px; left: 10px; }
+  .chair--ne { top: 6px; right: 10px; }
+  .chair--sw { bottom: 6px; left: 10px; }
+  .chair--se { bottom: 6px; right: 10px; }
+
+  .chair--overflow {
+    background: #C25A43;
+    border-color: #8C2F1F;
+  }
+
+  .verdict {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 4px;
+    border-left: 5px solid #4CAF50;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>Room Fit Planner</h1>
+    <p>Select your requirements to see a minimal blueprint generated in real-time.</p>
+  </header>
+
+  <main class="app-layout">
+    <!-- CONTROLS -->
+    <form class="controls" id="planner-form">
+      <fieldset>
+        <legend>01. Room Size</legend>
+        <label><input type="radio" name="size" value="small" checked> Small (10x10)</label>
+        <label><input type="radio" name="size" value="medium"> Medium (14x12)</label>
+        <label><input type="radio" name="size" value="large"> Large (20x16)</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>02. Room Dimensions</legend>
+        <div class="setting-row">
+          <div class="setting-field">
+            <label for="room-width">Width (px)</label>
+            <input type="number" id="room-width" min="120" max="800" step="10" value="280">
+          </div>
+          <div class="setting-field">
+            <label for="room-height">Height (px)</label>
+            <input type="number" id="room-height" min="120" max="800" step="10" value="240">
+          </div>
+        </div>
+        <p class="setting-note">Adjust the size directly or use the presets above.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>03. Tables & Chairs</legend>
+        <div class="setting-row">
+          <div class="setting-field">
+            <label for="table-count">Tables</label>
+            <input type="number" id="table-count" min="1" max="10" step="1" value="1">
+          </div>
+          <div class="setting-field">
+            <label for="chairs-per-table">Chairs per table</label>
+            <input type="number" id="chairs-per-table" min="1" max="4" step="1" value="4">
+          </div>
+        </div>
+        <p class="setting-note">Use these fields to add more tables or chairs to the layout.</p>
+      </fieldset>
+
+    </form>
+
+    <!-- VISUALIZATION -->
+    <section class="viewport">
+      <div class="room" id="room-box">
+        <div class="window" id="room-window"></div>
+        <!-- Tables will be injected here by JavaScript -->
+      </div>
+      
+      <div class="verdict" id="verdict-box">
+        Verdict: Perfect fit!
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const widthInput = document.getElementById('room-width');
+    const heightInput = document.getElementById('room-height');
+    const tableCountInput = document.getElementById('table-count');
+    const chairsPerTableInput = document.getElementById('chairs-per-table');
+
+    function syncDimensionsFromPreset(size) {
+      if (size === 'small') {
+        widthInput.value = '200';
+        heightInput.value = '200';
+      } else if (size === 'medium') {
+        widthInput.value = '280';
+        heightInput.value = '240';
+      } else if (size === 'large') {
+        widthInput.value = '400';
+        heightInput.value = '320';
+      }
+    }
+
+    function updateBlueprint() {
+      // Get current values
+      const size = document.querySelector('input[name="size"]:checked').value;
+      const tablesCount = parseInt(tableCountInput.value, 10) || 1;
+      const chairsPerTable = parseInt(chairsPerTableInput.value, 10) || 4;
+      const room = document.getElementById('room-box');
+      const windowEl = document.getElementById('room-window');
+      const verdict = document.getElementById('verdict-box');
+      const width = parseInt(widthInput.value, 10) || 280;
+      const height = parseInt(heightInput.value, 10) || 240;
+
+      // 1. Update Size
+      room.style.width = `${width}px`;
+      room.style.height = `${height}px`;
+
+      // 2. Update Tables
+      // Keep only the window, remove existing tables
+      room.innerHTML = '';
+      room.appendChild(windowEl);
+      
+      for (let i = 0; i < tablesCount; i++) {
+        const table = document.createElement('div');
+        table.className = 'table-unit';
+        const chairMarkup = [];
+        const chairPositions = ['chair--n', 'chair--s', 'chair--w', 'chair--e'];
+
+        for (let j = 0; j < Math.min(chairsPerTable, 4); j++) {
+          chairMarkup.push(`<span class="chair ${chairPositions[j]}"></span>`);
+        }
+
+        table.innerHTML = `
+          <div class="table-core"></div>
+          ${chairMarkup.join('')}
+        `;
+        room.appendChild(table);
+      }
+
+      // 3. Update Verdict Logic
+      if (size === 'small' && tablesCount > 2) {
+        verdict.innerText = '⚠️ Verdict: Too crowded! People won\'t be able to pull out their chairs.';
+        verdict.style.borderLeftColor = '#f44336'; // Red
+      } else if (size === 'medium' && tablesCount > 3) {
+        verdict.innerText = '⚠️ Verdict: A bit tight, but it works for an informal setup.';
+        verdict.style.borderLeftColor = '#ff9800'; // Orange
+      } else {
+        verdict.innerText = '✅ Verdict: Comfortable fit. Plenty of walking clearance.';
+        verdict.style.borderLeftColor = '#4CAF50'; // Green
+      }
+    }
+
+    // Attach event listeners to all radio buttons
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+      input.addEventListener('change', () => {
+        if (input.name === 'size') {
+          syncDimensionsFromPreset(input.value);
+        }
+        updateBlueprint();
+      });
+    });
+
+    [widthInput, heightInput, tableCountInput, chairsPerTableInput].forEach(input => {
+      input.addEventListener('input', updateBlueprint);
+      input.addEventListener('change', updateBlueprint);
+    });
+
+    // Run once on load
+    syncDimensionsFromPreset(document.querySelector('input[name="size"]:checked').value);
+    updateBlueprint();
+  </script>
+</body>
+</html>

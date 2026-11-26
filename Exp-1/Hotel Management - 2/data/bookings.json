@@ -1,0 +1,17 @@
+[
+  {
+    "customerName": "Ava Sharma",
+    "phoneNo": "9876543210",
+    "hallSize": "small",
+    "hallSizeLabel": "Small Hall",
+    "hallDimensions": "10 x 10",
+    "tables": 1,
+    "chairs": 4,
+    "date": "2026-08-17",
+    "customerId": "CUST-867990-RGOBQ",
+    "remarks": "Birthday booking",
+    "layoutsPossible": 3,
+    "recommendedLayout": "Row Layout",
+    "createdAt": "2026-08-17T09:11:14.897Z"
+  }
+]
